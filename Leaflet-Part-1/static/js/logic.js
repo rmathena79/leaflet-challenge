@@ -32,16 +32,19 @@ function createMarkers(response) {
     // For each quake, create a marker, and bind a popup.
     // Add the marker to the markers array.
     let details = `Magnitude: ${f.properties.mag}<BR>Location: ${f.properties.place}<BR>Depth: ${f.geometry.coordinates[2]}km`;
+    color = f.geometry.coordinates[2]; //!!!
+    radius = 1 + Math.pow(f.properties.mag, 2) * 5000;
     markers.push(
-      L.marker([
-        f.geometry.coordinates[1],
-        f.geometry.coordinates[0],
-      ]).bindPopup(details)
+      L.circle([f.geometry.coordinates[1], f.geometry.coordinates[0]], {
+        fillOpacity: 0.75,
+        color: color,
+        fillColor: color,
+        radius: radius,
+      }).bindPopup(details)
     );
   });
 
   // Create a layer group that's made from the bike markers array, and pass it to the createMap function.
-  console.log(markers);
   let layerGroup = L.layerGroup(markers);
   createMap(layerGroup);
 }
